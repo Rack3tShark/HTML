@@ -3,740 +3,1044 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cursed Awakening</title>
+    <title>Cursed Awakening — The Broken Heaven</title>
     <style>
       :root {
-        --bg: #070b14;
-        --panel: #101727;
-        --panel-2: #18233a;
-        --text: #f4f7ff;
-        --muted: #9eb2d6;
-        --accent: #ff5d7a;
-        --accent-2: #6da8ff;
-        --accent-3: #2ee6c1;
+        --bg: #050816;
+        --panel: #0e1630;
+        --text: #f7f8ff;
+        --muted: #96a8cd;
+        --accent: #ff5c7f;
+        --accent-2: #4fafff;
+        --accent-3: #35e0c2;
       }
 
-      * {
-        box-sizing: border-box;
-      }
+      * { box-sizing: border-box; }
 
       body {
         margin: 0;
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, var(--bg), #111b2d 55%, #1c1630);
+        background: radial-gradient(circle at top, #19254d, var(--bg));
         color: var(--text);
-        line-height: 1.6;
-        overflow-x: hidden;
-        position: relative;
-        scroll-behavior: smooth;
-      }
-
-      body::before,
-      body::after {
-        content: "";
-        position: fixed;
-        inset: auto;
-        width: 24rem;
-        height: 24rem;
-        border-radius: 50%;
-        filter: blur(80px);
-        opacity: 0.22;
-        pointer-events: none;
-        z-index: -1;
-        animation: drift 16s ease-in-out infinite alternate;
-      }
-
-      body::before {
-        top: -6rem;
-        right: -4rem;
-        background: var(--accent);
-      }
-
-      body::after {
-        bottom: -8rem;
-        left: -6rem;
-        background: var(--accent-2);
-        animation-duration: 18s;
-      }
-
-      a {
-        color: var(--accent-2);
-      }
-
-      header {
-        padding: 4rem 1.5rem 3rem;
-        background: radial-gradient(circle at top, rgba(109, 168, 255, 0.25), transparent 55%);
-      }
-
-      .hero {
-        max-width: 1100px;
-        margin: 0 auto;
-        display: grid;
-        gap: 2rem;
+        min-height: 100vh;
+        display: flex;
         align-items: center;
-        grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
-        position: relative;
+        justify-content: center;
+        padding: 18px;
       }
 
-      .hero::after {
-        content: "";
-        position: absolute;
-        inset: auto 5% -2rem auto;
-        width: 14rem;
-        height: 14rem;
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        border-radius: 50%;
-        transform: rotate(28deg);
-        pointer-events: none;
+      .shell {
+        width: min(1220px, 100%);
+        background: rgba(7, 10, 20, 0.95);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 28px 100px rgba(0,0,0,0.45);
       }
 
-      .hero-intro {
-        position: relative;
-        z-index: 1;
-      }
-
-      .hero h1 {
-        font-size: clamp(2.6rem, 5vw, 4.4rem);
-        margin: 0 0 1rem;
-        line-height: 1.05;
-        letter-spacing: -0.03em;
-        background: linear-gradient(120deg, #ffffff, #ffd2df 35%, #7dbcff 70%, #2ee6c1);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 24px rgba(255, 255, 255, 0.16);
-      }
-
-      .hero p {
-        font-size: 1.1rem;
-        color: var(--muted);
-        max-width: 680px;
-      }
-
-      .cta-row {
+      .topbar {
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.8rem;
-        margin-top: 1.2rem;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        background: linear-gradient(90deg, rgba(255,92,127,0.16), rgba(79,175,255,0.14));
+        border-bottom: 1px solid rgba(255,255,255,0.08);
       }
 
-      .btn {
-        display: inline-block;
-        padding: 0.8rem 1.1rem;
+      .topbar h1 {
+        margin: 0;
+        font-size: 1.4rem;
+        letter-spacing: 0.03em;
+      }
+
+      .topbar p {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .badge {
+        padding: 8px 12px;
         border-radius: 999px;
-        text-decoration: none;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.14);
+        color: var(--text);
+        font-size: 0.84rem;
+      }
+
+      .hud {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 10px;
+        padding: 14px 18px;
+        background: rgba(255,255,255,0.03);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .stat {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 12px;
+        padding: 10px 12px;
+      }
+
+      .stat .label {
+        display: block;
+        font-size: 0.75rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        margin-bottom: 6px;
+      }
+
+      .bar {
+        width: 100%;
+        height: 9px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.12);
+        overflow: hidden;
+      }
+
+      .bar > div {
+        height: 100%;
+        transition: width 0.15s ease;
+      }
+
+      .bar.hp > div { background: linear-gradient(90deg, #ff748d, #ff3d5c); }
+      .bar.energy > div { background: linear-gradient(90deg, #81f2ff, #2d97ff); }
+      .bar.shield > div { background: linear-gradient(90deg, #b3f1ff, #50c5ff); }
+
+      .stat .value {
+        display: block;
+        margin-top: 6px;
         font-weight: 700;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        font-size: 0.95rem;
       }
 
-      .btn:hover {
-        transform: translateY(-2px);
+      canvas {
+        display: block;
+        width: 100%;
+        height: auto;
+        background: linear-gradient(180deg, #081129, #04060c);
+        cursor: crosshair;
       }
 
-      .btn-primary {
-        background: linear-gradient(135deg, var(--accent), #ff7b96);
-        color: white;
-        box-shadow: 0 10px 30px rgba(255, 93, 122, 0.2);
+      .controls {
+        padding: 12px 18px 16px;
+        color: var(--muted);
+        font-size: 0.95rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
       }
 
-      .btn-secondary {
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        color: var(--text);
-      }
-
-      .hero .badge {
-        display: inline-block;
-        padding: 0.4rem 0.8rem;
-        border-radius: 999px;
-        background: rgba(255, 93, 122, 0.16);
-        color: #ffd0db;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-      }
-
-      .hero-card {
-        background: linear-gradient(145deg, rgba(16, 23, 39, 0.95), rgba(24, 35, 58, 0.82));
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 1.35rem;
-        padding: 1.4rem;
-        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.32);
-        transform: perspective(1000px) rotateY(-7deg) rotateX(6deg);
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
-        position: relative;
-        overflow: hidden;
-        isolation: isolate;
-      }
-
-      .hero-card:hover {
-        transform: perspective(1000px) rotateY(-3deg) rotateX(2deg) translateY(-4px);
-        box-shadow: 0 32px 90px rgba(0, 0, 0, 0.38);
-      }
-
-      .hero-card::before {
-        content: "";
+      .overlay {
         position: absolute;
         inset: 0;
-        background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.12) 50%, transparent 80%);
-        transform: translateX(-120%);
-        animation: shimmer 5s linear infinite;
-      }
-
-      .hero-badges {
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.55rem;
-        margin-bottom: 0.9rem;
-      }
-
-      .chip {
-        display: inline-block;
-        padding: 0.42rem 0.7rem;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
-        color: #e7f2ff;
-        font-size: 0.8rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .hero-preview {
-        display: grid;
-        gap: 0.7rem;
-        margin-top: 1rem;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .mini-panel {
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 0.9rem;
-        padding: 0.8rem;
-        min-height: 84px;
+        align-items: center;
+        justify-content: center;
+        background: rgba(4, 7, 13, 0.76);
         backdrop-filter: blur(8px);
+        padding: 24px;
+        text-align: center;
       }
 
-      .mini-panel strong {
-        display: block;
-        margin-bottom: 0.25rem;
-        color: #fff2f6;
+      .overlay.hidden { display: none; }
+
+      .panel {
+        max-width: 580px;
+        padding: 26px 24px;
+        border-radius: 18px;
+        background: rgba(12, 18, 32, 0.96);
+        border: 1px solid rgba(255,255,255,0.12);
+        box-shadow: 0 24px 70px rgba(0,0,0,0.4);
       }
 
-      .mini-panel span {
-        color: var(--muted);
-        font-size: 0.92rem;
+      .panel h2 {
+        margin: 0 0 10px;
+        font-size: 1.55rem;
       }
 
-      nav {
-        position: sticky;
-        top: 0.8rem;
-        z-index: 10;
-        max-width: 1100px;
-        margin: 0 auto 2rem;
-        padding: 0 1.5rem;
-      }
+      .panel p { color: var(--muted); line-height: 1.6; }
 
-      nav ul {
-        list-style: none;
+      .btns {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.75rem;
-        padding: 0.75rem 0.9rem;
-        margin: 0;
-        border-radius: 999px;
-        background: rgba(8, 12, 24, 0.7);
-        backdrop-filter: blur(14px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+        gap: 10px;
+        justify-content: center;
+        margin-top: 16px;
       }
 
-      nav a {
-        text-decoration: none;
+      .btns button {
+        border: none;
+        border-radius: 999px;
+        padding: 10px 14px;
+        font-weight: 700;
+        cursor: pointer;
+        color: white;
+        background: linear-gradient(90deg, var(--accent), #ff7d95);
+        box-shadow: 0 10px 26px rgba(255, 92, 127, 0.24);
+      }
+
+      .btns .secondary {
+        background: rgba(255,255,255,0.08);
+        box-shadow: none;
         color: var(--text);
-        padding: 0.6rem 0.95rem;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.06);
-        transition: background 0.2s ease, transform 0.2s ease;
+        border: 1px solid rgba(255,255,255,0.14);
       }
 
-      nav a:hover {
-        background: rgba(255, 255, 255, 0.12);
-        transform: translateY(-1px);
-      }
-
-      main {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 0 1.5rem 4rem;
-      }
-
-      section {
-        margin-bottom: 2rem;
-      }
-
-      .section-title {
-        font-size: 1.5rem;
-        margin-bottom: 0.8rem;
-        color: #f9f0f4;
-        text-shadow: 0 0 20px rgba(255, 93, 122, 0.18);
-      }
-
-      .eyebrow {
-        display: inline-block;
-        text-transform: uppercase;
-        letter-spacing: 0.16em;
-        font-size: 0.78rem;
-        color: #ffd7e2;
-        margin-bottom: 0.6rem;
-      }
-
-      .feature-band {
-        max-width: 1100px;
-        margin: 0 auto 2rem;
-        padding: 0 1.5rem;
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: 1.2fr 0.8fr;
-      }
-
-      .feature-panel {
-        background: linear-gradient(135deg, rgba(255, 93, 122, 0.18), rgba(109, 168, 255, 0.18));
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 1.2rem;
-        padding: 1.2rem 1.3rem;
-        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.2);
-      }
-
-      .feature-panel h2 {
-        margin: 0 0 0.5rem;
-        font-size: 1.45rem;
-      }
-
-      .feature-panel p {
-        margin: 0;
-        color: var(--muted);
-      }
-
-      .stats-grid {
-        display: grid;
-        gap: 0.8rem;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .stat-card {
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 1rem;
-        padding: 0.95rem 1rem;
-        backdrop-filter: blur(10px);
-      }
-
-      .stat-card strong {
-        display: block;
-        font-size: 1.25rem;
-        color: #fff;
-        margin-bottom: 0.2rem;
-      }
-
-      .stat-card span {
-        color: var(--muted);
-        font-size: 0.95rem;
-      }
-
-      .grid {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .card {
-        background: linear-gradient(145deg, rgba(16, 23, 39, 0.96), rgba(24, 35, 58, 0.85));
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 1rem;
-        padding: 1.2rem 1.3rem;
-        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
-        position: relative;
-        overflow: hidden;
-        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-      }
-
-      .card:hover {
-        transform: translateY(-6px) scale(1.01);
-        box-shadow: 0 16px 44px rgba(0, 0, 0, 0.24);
-        border-color: rgba(109, 168, 255, 0.35);
-      }
-
-      .card::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.04) 50%, transparent 100%);
-        pointer-events: none;
-      }
-
-      .card h3 {
-        margin-top: 0;
-        margin-bottom: 0.6rem;
-      }
-
-      .card ul {
-        padding-left: 1.1rem;
-        margin: 0;
-        color: var(--muted);
-      }
-
-      .highlight {
-        color: #ffd8e1;
-      }
-
-      footer {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 0 1.5rem 2rem;
-        color: var(--muted);
-        font-size: 0.95rem;
-      }
-
-      @keyframes drift {
-        from {
-          transform: translate3d(0, 0, 0) scale(1);
-        }
-        to {
-          transform: translate3d(30px, -20px, 0) scale(1.08);
-        }
-      }
-
-      @keyframes shimmer {
-        from {
-          transform: translateX(-120%);
-        }
-        to {
-          transform: translateX(120%);
-        }
-      }
-
-      @keyframes floaty {
-        0%,
-        100% {
-          transform: translateY(0px);
-        }
-        50% {
-          transform: translateY(-10px);
-        }
-      }
-
-      .orb {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(1px);
-        animation: floaty 6s ease-in-out infinite;
-      }
-
-      .orb.one {
-        width: 4rem;
-        height: 4rem;
-        background: rgba(255, 93, 122, 0.45);
-        top: 1rem;
-        right: 1.2rem;
-      }
-
-      .orb.two {
-        width: 2.4rem;
-        height: 2.4rem;
-        background: rgba(46, 230, 193, 0.4);
-        bottom: 1rem;
-        left: 1rem;
-        animation-delay: -2s;
-      }
-
-      @media (max-width: 800px) {
-        .hero {
-          grid-template-columns: 1fr;
-        }
-
-        .grid {
-          grid-template-columns: 1fr;
-        }
-
-        .hero-preview {
-          grid-template-columns: 1fr;
-        }
-
-        .feature-band {
-          grid-template-columns: 1fr;
-        }
-
-        .stats-grid {
-          grid-template-columns: 1fr 1fr;
-        }
+      @media (max-width: 900px) {
+        .hud { grid-template-columns: 1fr 1fr; }
       }
     </style>
   </head>
   <body>
-    <header>
-      <div class="hero">
-        <div class="hero-intro">
-          <span class="badge">Original Action RPG Concept</span>
+    <div class="shell">
+      <div class="topbar">
+        <div>
           <h1>Cursed Awakening</h1>
-          <p>
-            A browser-based action RPG where fast combat, supernatural energy, and cinematic boss battles collide in a city torn between ancient powers and modern ruin.
-          </p>
-          <div class="cta-row">
-            <a class="btn btn-primary" href="#combat">Explore Combat</a>
-            <a class="btn btn-secondary" href="#systems">See the World</a>
-          </div>
+          <p>Battle through the broken heavens and claim the city from the curse.</p>
         </div>
-        <div class="hero-card">
-          <div class="orb one"></div>
-          <div class="orb two"></div>
-          <div class="hero-badges">
-            <span class="chip">Anime Action</span>
-            <span class="chip">3D Stylized</span>
-            <span class="chip">Branching Fate</span>
-          </div>
-          <h2>Core Pitch</h2>
-          <p>
-            The game blends anime-style presentation with a fresh supernatural energy system, letting players unleash devastating techniques, command AI teammates, survive brutal boss phases, and shape the fate of a fractured world as a cursed, heavenly-bound, or entirely self-made warrior.
-          </p>
-          <div class="hero-preview">
-            <div class="mini-panel">
-              <strong>Ultimate Field</strong>
-              <span>Sky-shattering arenas with new rules and finishers.</span>
-            </div>
-            <div class="mini-panel">
-              <strong>Adaptive Combat</strong>
-              <span>Enemies learn and bosses evolve through each clash.</span>
-            </div>
-            <div class="mini-panel">
-              <strong>Custom Curses</strong>
-              <span>Turn divine restrictions into a signature build.</span>
-            </div>
-            <div class="mini-panel">
-              <strong>Anime Flair</strong>
-              <span>Stylized visuals, dramatic effects, and cinematic pacing.</span>
+        <div class="badge">Expanded action RPG demo</div>
+      </div>
+
+      <div class="hud">
+        <div class="stat">
+          <span class="label">Health</span>
+          <div class="bar hp"><div id="hpFill"></div></div>
+          <span id="hpValue" class="value">100 / 100</span>
+        </div>
+        <div class="stat">
+          <span class="label">Energy</span>
+          <div class="bar energy"><div id="energyFill"></div></div>
+          <span id="energyValue" class="value">0 / 100</span>
+        </div>
+        <div class="stat">
+          <span class="label">Shield</span>
+          <div class="bar shield"><div id="shieldFill"></div></div>
+          <span id="shieldValue" class="value">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">Wave</span>
+          <div class="value" id="waveValue">1</div>
+        </div>
+        <div class="stat">
+          <span class="label">Score</span>
+          <div class="value" id="scoreValue">0</div>
+        </div>
+      </div>
+
+      <div style="position:relative;">
+        <canvas id="game" width="960" height="560"></canvas>
+        <div id="overlay" class="overlay">
+          <div class="panel">
+            <h2>Enter the cursed city</h2>
+            <p>The heavens have fallen. Your curse is the only weapon left. Survive the waves, collect orbs, chain your abilities, and break the celestial gate before the city is consumed. Move with WASD or arrows, attack with the mouse, dodge with Shift, and cast Q/E/R for devastating techniques.</p>
+            <div class="btns">
+              <button id="startBtn">Start Game</button>
+              <button id="muteBtn" class="secondary">No Audio</button>
             </div>
           </div>
         </div>
       </div>
-    </header>
 
-    <nav>
-      <ul>
-        <li><a href="#overview">Overview</a></li>
-        <li><a href="#combat">Combat</a></li>
-        <li><a href="#world">World</a></li>
-        <li><a href="#progression">Progression</a></li>
-        <li><a href="#story">Story</a></li>
-      </ul>
-    </nav>
-
-    <section class="feature-band">
-      <div class="feature-panel">
-        <div class="eyebrow">Why it feels alive</div>
-        <h2>Every encounter can become a cinematic turning point.</h2>
-        <p>From cursed duels to sky-splitting ultimate fields, the game is built to make every fight, discovery, and betrayal feel dramatic, stylish, and unforgettable.</p>
+      <div class="controls">
+        <span>Controls: Move • Attack • Dodge • Q/E/R • F Ultimate • C Curse • V Seal</span>
+        <span>Tip: the curse is powerful but it eats health unless you manage your seal.</span>
       </div>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <strong>12+</strong>
-          <span>Signature techniques</span>
-        </div>
-        <div class="stat-card">
-          <strong>4+</strong>
-          <span>Faction paths</span>
-        </div>
-        <div class="stat-card">
-          <strong>7</strong>
-          <span>Playable combat styles</span>
-        </div>
-        <div class="stat-card">
-          <strong>∞</strong>
-          <span>Build potential</span>
-        </div>
-      </div>
-    </section>
+    </div>
 
-    <main>
-      <section id="overview">
-        <h2 class="section-title">Overview</h2>
-        <div class="grid">
-          <article class="card">
-            <h3>Genre & Platform</h3>
-            <ul>
-              <li>Open-world action RPG</li>
-              <li>Desktop-first browser experience</li>
-              <li>Mobile support planned for later</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>Visual Style</h3>
-            <ul>
-              <li>Anime-inspired cel shading</li>
-              <li>Dynamic lighting and weather</li>
-              <li>Day/night cycle with destructible environments</li>
-            </ul>
-          </article>
-        </div>
-      </section>
+    <script>
+      const canvas = document.getElementById('game');
+      const ctx = canvas.getContext('2d');
+      const overlay = document.getElementById('overlay');
+      const startBtn = document.getElementById('startBtn');
+      const muteBtn = document.getElementById('muteBtn');
+      const hpFill = document.getElementById('hpFill');
+      const energyFill = document.getElementById('energyFill');
+      const shieldFill = document.getElementById('shieldFill');
+      const hpValue = document.getElementById('hpValue');
+      const energyValue = document.getElementById('energyValue');
+      const shieldValue = document.getElementById('shieldValue');
+      const waveValue = document.getElementById('waveValue');
+      const scoreValue = document.getElementById('scoreValue');
 
-      <section id="combat">
-        <h2 class="section-title">Combat</h2>
-        <div class="grid">
-          <article class="card">
-            <h3>Fluid Action</h3>
-            <ul>
-              <li>Light combo chains and heavy attacks</li>
-              <li>Launches, air combos, ground slams, and wall bounces</li>
-              <li>Parries, counters, grabs, and perfect dodges</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>Energy System</h3>
-            <ul>
-              <li>Build energy through landed hits and perfect defense</li>
-              <li>Spend it on special techniques and ultimates</li>
-              <li>Create defensive barriers and movement-enhancing skills</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>AI Enemies & Teammates</h3>
-            <ul>
-              <li>Enemies study your habits and adapt their aggression</li>
-              <li>AI teammates support with buffs, assists, and tactical combos</li>
-              <li>Companions can be customized to fit your preferred combat style</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>Techniques, Restrictions & Curses</h3>
-            <ul>
-              <li>Void Blades, Gravity Pulse, Spirit Chains, Flame Rift, Thunder Crash, Ice Lotus</li>
-              <li>Starfall Lattice, Cursed Echo, Aegis Thread, and Rift Cannon</li>
-              <li>Heavenly restrictions can limit certain powers, while curses reshape your abilities and identity</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>Ultimate Fields</h3>
-            <ul>
-              <li>Temporary arenas with altered rules</li>
-              <li>Trapped enemies and transformed environments</li>
-              <li>Exclusive finishers and dramatic visual effects</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>Playstyle Freedom</h3>
-            <ul>
-              <li>Become a melee duelist, ranged technique user, or curse-bound hybrid</li>
-              <li>Mix divine power, forbidden magic, and AI-assisted tactics</li>
-              <li>Shape your hero into whatever you want to be</li>
-            </ul>
-          </article>
-        </div>
-      </section>
+      const keys = { ArrowUp:false, ArrowDown:false, ArrowLeft:false, ArrowRight:false, w:false, a:false, s:false, d:false, Shift:false };
+      const mouse = { x: 0, y: 0, down: false };
+      let running = false;
+      let gameOver = false;
+      let muted = true;
+      let lastTime = 0;
+      let shake = 0;
+      let attackFlash = 0;
+      let cameraOffsetX = 0;
+      let cameraOffsetY = 0;
 
-      <section id="world">
-        <h2 class="section-title">World & Exploration</h2>
-        <div class="grid">
-          <article class="card">
-            <h3>Regions</h3>
-            <ul>
-              <li>Modern city</li>
-              <li>Forest and mountains</li>
-              <li>Abandoned subway, labs, temples, and hidden dimensions</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>Exploration Features</h3>
-            <ul>
-              <li>Parkour routes, wall runs, air dashes, and grapples</li>
-              <li>Hidden collectibles and secret bosses</li>
-              <li>Fast travel to revisit earlier regions with new abilities</li>
-            </ul>
-          </article>
-        </div>
-      </section>
+      const game = {
+        player: null,
+        enemies: [],
+        projectiles: [],
+        particles: [],
+        pickups: [],
+        messages: [],
+        ally: null,
+        wave: 1,
+        score: 0,
+        waveGoal: 450,
+        enemyTimer: 0,
+        bossTimer: 0,
+        spawnRate: 1.1,
+        enemyCount: 0,
+        curseActive: false,
+        sealActive: false,
+        ultimateActive: false,
+        timeSurvived: 0,
+        combo: 0,
+        messageSeed: 0
+      };
 
-      <section id="progression">
-        <h2 class="section-title">Progression & Replayability</h2>
-        <div class="grid">
-          <article class="card">
-            <h3>Player Growth</h3>
-            <ul>
-              <li>Experience, levels, skill trees, and upgrades</li>
-              <li>Technique and equipment advancement</li>
-              <li>Cosmetics, titles, and achievements</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>Endgame</h3>
-            <ul>
-              <li>Survival mode and time trials</li>
-              <li>Boss rush, randomized dungeons, and daily challenges</li>
-              <li>New techniques, hidden superbosses, and New Game+</li>
-            </ul>
-          </article>
-        </div>
-      </section>
+      function resetGame() {
+        game.player = {
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          radius: 20,
+          speed: 260,
+          hp: 100,
+          maxHp: 100,
+          energy: 0,
+          maxEnergy: 100,
+          shield: 0,
+          dirX: 1,
+          dirY: 0,
+          invuln: 0,
+          attackCooldown: 0,
+          dodgeCooldown: 0,
+          dashTimer: 0,
+          dashDirX: 0,
+          dashDirY: 0,
+          ultimateTimer: 0,
+          attackAnim: 0,
+          combo: 0,
+          curseActive: false,
+          sealActive: false
+        };
+        game.enemies = [];
+        game.projectiles = [];
+        game.particles = [];
+        game.pickups = [];
+        game.messages = [];
+        game.ally = {
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          radius: 12,
+          hp: 70,
+          cooldown: 0,
+          glow: 0
+        };
+        game.wave = 1;
+        game.score = 0;
+        game.waveGoal = 450;
+        game.enemyTimer = 0.8;
+        game.bossTimer = 10;
+        game.spawnRate = 1.1;
+        game.enemyCount = 0;
+        game.curseActive = false;
+        game.sealActive = false;
+        game.ultimateActive = false;
+        game.timeSurvived = 0;
+        game.combo = 0;
+        attackFlash = 0;
+        shake = 0;
+      }
 
-      <section id="systems">
-        <h2 class="section-title">What Makes It Feel Bigger</h2>
-        <div class="grid">
-          <article class="card">
-            <h3>Faction Conflict</h3>
-            <ul>
-              <li>Heavenly agents, cursed cults, and rogue hunters all compete for control</li>
-              <li>Ally with factions, betray them, or walk your own path</li>
-              <li>Choices affect story outcomes, rewards, and available powers</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>Adaptive Bosses</h3>
-            <ul>
-              <li>Bosses learn from your attacks and change their tactics mid-fight</li>
-              <li>Environmental hazards intensify as the battle evolves</li>
-              <li>Each encounter can become a different kind of test depending on your build</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>Meaningful Customization</h3>
-            <ul>
-              <li>Equip cursed relics, divine sigils, and combat stances</li>
-              <li>Unlock alternate fighting styles and signature finishing moves</li>
-              <li>Build a hero that feels uniquely yours rather than just stronger</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>Memorable Moments</h3>
-            <ul>
-              <li>Sky-shattering ultimate fields and citywide transformations</li>
-              <li>Emotional story scenes, betrayals, and dramatic revelations</li>
-              <li>Replayable routes that reward experimentation and curiosity</li>
-            </ul>
-          </article>
-        </div>
-      </section>
+      function startGame() {
+        resetGame();
+        running = true;
+        gameOver = false;
+        overlay.classList.add('hidden');
+        lastTime = performance.now();
+        requestAnimationFrame(loop);
+      }
 
-      <section id="story">
-        <h2 class="section-title">Story & Polish</h2>
-        <div class="grid">
-          <article class="card">
-            <h3>Story Hook</h3>
-            <p>
-              A young protagonist uncovers an ancient source of supernatural power after citywide disasters begin to erupt. Rival factions, hidden truths, and morally complex alliances shape a branching finale.
-            </p>
-          </article>
-          <article class="card">
-            <h3>Polish Layer</h3>
-            <p>
-              The experience is elevated with an anime-inspired soundtrack, voice effects, screen shake, particle-heavy attacks, damage numbers, a combo counter, motion blur options, and a photo mode.
-            </p>
-          </article>
-        </div>
-      </section>
-    </main>
+      function endGame() {
+        running = false;
+        gameOver = true;
+        overlay.classList.remove('hidden');
+        overlay.querySelector('h2').textContent = 'The city has fallen';
+        overlay.querySelector('p').textContent = `You survived ${Math.floor(game.timeSurvived)} seconds, reached wave ${game.wave}, and scored ${game.score}. Press start to try again.`;
+        startBtn.textContent = 'Try Again';
+      }
 
-    <footer>
-      <p>Built as a polished HTML showcase for the <span class="highlight">Cursed Awakening</span> concept — a stylish, anime-inspired action RPG pitch with cinematic ambition.</p>
-    </footer>
+      function addParticle(x, y, color, count, speed = 140) {
+        for (let i = 0; i < count; i++) {
+          game.particles.push({
+            x, y,
+            vx: (Math.random() - 0.5) * speed,
+            vy: (Math.random() - 0.5) * speed,
+            life: 0.7 + Math.random() * 0.4,
+            color,
+            size: 2 + Math.random() * 3
+          });
+        }
+      }
+
+      function addTextMessage(text, x, y, color) {
+        game.messages.push({ text, x, y, life: 1.1, color });
+      }
+
+      function spawnEnemy() {
+        const waveTypes = [
+          { type: 'spirit', hp: 24, speed: 92, color: '#f6a0d3', radius: 12, damage: 8 },
+          { type: 'hunter', hp: 38, speed: 78, color: '#7fd4ff', radius: 16, damage: 11 },
+          { type: 'sentinel', hp: 54, speed: 58, color: '#ff9558', radius: 18, damage: 14 },
+          { type: 'wraith', hp: 72, speed: 64, color: '#a88dff', radius: 15, damage: 16 }
+        ];
+
+        const allowed = game.wave > 3 ? waveTypes : waveTypes.slice(0, 3);
+        const pick = allowed[Math.floor(Math.random() * allowed.length)];
+        const side = Math.floor(Math.random() * 4);
+        let x = 0, y = 0;
+        if (side === 0) { x = -20; y = Math.random() * canvas.height; }
+        if (side === 1) { x = canvas.width + 20; y = Math.random() * canvas.height; }
+        if (side === 2) { x = Math.random() * canvas.width; y = -20; }
+        if (side === 3) { x = Math.random() * canvas.width; y = canvas.height + 20; }
+
+        game.enemies.push({
+          x, y,
+          radius: pick.radius,
+          hp: pick.hp + Math.floor(game.wave * 1.5),
+          speed: pick.speed + Math.min(24, game.wave * 3),
+          color: pick.color,
+          damage: pick.damage,
+          type: pick.type,
+          attackCooldown: 0,
+          alive: true,
+          boss: false,
+          drift: Math.random() * Math.PI * 2,
+          phase: Math.random() * 2
+        });
+        game.enemyCount++;
+      }
+
+      function spawnBoss() {
+        const x = canvas.width / 2 + (Math.random() > 0.5 ? 190 : -190);
+        const y = canvas.height / 2 + (Math.random() > 0.5 ? 120 : -120);
+        game.enemies.push({
+          x, y,
+          radius: 36,
+          hp: 260 + game.wave * 24,
+          speed: 50,
+          color: '#ff4d6d',
+          damage: 24,
+          type: 'archon',
+          attackCooldown: 0,
+          alive: true,
+          boss: true,
+          drift: Math.random() * Math.PI * 2,
+          phase: 0
+        });
+        addTextMessage('Archon incoming', canvas.width / 2 - 70, 90, '#ffd588');
+      }
+
+      function spawnPickup() {
+        if (Math.random() > 0.013) return;
+        const type = Math.random() > 0.5 ? 'heal' : 'energy';
+        game.pickups.push({
+          x: 70 + Math.random() * (canvas.width - 140),
+          y: 70 + Math.random() * (canvas.height - 140),
+          radius: 10,
+          type,
+          life: 8 + Math.random() * 4
+        });
+      }
+
+      function updateHud() {
+        hpFill.style.width = `${Math.max(0, (game.player.hp / game.player.maxHp) * 100)}%`;
+        energyFill.style.width = `${Math.max(0, (game.player.energy / game.player.maxEnergy) * 100)}%`;
+        shieldFill.style.width = `${Math.max(0, (game.player.shield / 80) * 100)}%`;
+        hpValue.textContent = `${Math.max(0, Math.round(game.player.hp))} / ${game.player.maxHp}`;
+        energyValue.textContent = `${Math.max(0, Math.round(game.player.energy))} / ${game.player.maxEnergy}`;
+        shieldValue.textContent = game.player.shield > 0 ? `${Math.round(game.player.shield)}` : '0';
+        waveValue.textContent = game.wave;
+        scoreValue.textContent = game.score;
+      }
+
+      function handleInput(dt) {
+        const moveX = (keys.d || keys.ArrowRight ? 1 : 0) - (keys.a || keys.ArrowLeft ? 1 : 0);
+        const moveY = (keys.s || keys.ArrowDown ? 1 : 0) - (keys.w || keys.ArrowUp ? 1 : 0);
+        const len = moveX || moveY ? Math.hypot(moveX, moveY) : 1;
+        const vx = (moveX / len) * game.player.speed * dt;
+        const vy = (moveY / len) * game.player.speed * dt;
+
+        if (keys.Shift && game.player.dodgeCooldown <= 0) {
+          game.player.dashTimer = 0.18;
+          game.player.dashDirX = vx / dt || game.player.dirX;
+          game.player.dashDirY = vy / dt || game.player.dirY;
+          game.player.dodgeCooldown = 0.8;
+          game.player.invuln = 0.2;
+          addParticle(game.player.x, game.player.y, '#8fe6ff', 20, 180);
+        }
+
+        if (game.player.dashTimer > 0) {
+          game.player.x += game.player.dashDirX * 760 * dt;
+          game.player.y += game.player.dashDirY * 760 * dt;
+          game.player.dashTimer -= dt;
+        } else {
+          game.player.x += vx;
+          game.player.y += vy;
+        }
+
+        if (moveX || moveY) {
+          game.player.dirX = moveX || game.player.dirX;
+          game.player.dirY = moveY || game.player.dirY;
+        }
+
+        game.player.x = Math.max(24, Math.min(canvas.width - 24, game.player.x));
+        game.player.y = Math.max(24, Math.min(canvas.height - 24, game.player.y));
+
+        if (game.player.attackCooldown > 0) game.player.attackCooldown -= dt;
+        if (game.player.dodgeCooldown > 0) game.player.dodgeCooldown -= dt;
+        if (game.player.invuln > 0) game.player.invuln -= dt;
+        if (game.player.ultimateTimer > 0) game.player.ultimateTimer -= dt;
+        if (game.player.attackAnim > 0) game.player.attackAnim -= dt;
+        if (game.player.ultimateTimer <= 0) game.player.ultimateActive = false;
+      }
+
+      function attack() {
+        if (!running || game.player.attackCooldown > 0) return;
+        game.player.attackCooldown = 0.22;
+        game.player.attackAnim = 0.18;
+        attackFlash = 0.16;
+
+        const aimX = mouse.x - game.player.x;
+        const aimY = mouse.y - game.player.y;
+        const len = Math.hypot(aimX, aimY) || 1;
+        const dirX = aimX / len;
+        const dirY = aimY / len;
+        const attackRange = 90;
+        let hit = false;
+
+        for (const enemy of game.enemies) {
+          const dist = Math.hypot(enemy.x - game.player.x, enemy.y - game.player.y);
+          const forward = (enemy.x - game.player.x) * dirX + (enemy.y - game.player.y) * dirY;
+          if (dist < attackRange + enemy.radius && forward > 0) {
+            const damage = game.player.ultimateActive ? 30 : 18 + (game.curseActive ? 4 : 0);
+            enemy.hp -= damage;
+            enemy.x += dirX * 12;
+            enemy.y += dirY * 12;
+            hit = true;
+            game.player.energy = Math.min(game.player.maxEnergy, game.player.energy + 7);
+            addParticle(enemy.x, enemy.y, '#ffe5b2', 14);
+            addTextMessage(`+${damage}`, enemy.x, enemy.y - 10, '#ffe5b2');
+            if (enemy.hp <= 0) {
+              enemy.alive = false;
+              game.score += enemy.boss ? 260 : 80;
+              game.combo += 1;
+              game.player.energy = Math.min(game.player.maxEnergy, game.player.energy + 12);
+              addParticle(enemy.x, enemy.y, enemy.color, 24);
+              addTextMessage('Broken', enemy.x, enemy.y - 18, '#8fffd8');
+              if (Math.random() < 0.35) spawnPickup();
+            }
+          }
+        }
+
+        if (!hit) {
+          addParticle(game.player.x + dirX * 45, game.player.y + dirY * 45, '#ffffff', 8);
+        }
+      }
+
+      function castTechnique(key) {
+        if (!running) return;
+        const p = game.player;
+        if (key === 'q' && p.energy >= 25) {
+          p.energy -= 25;
+          const aimX = mouse.x - p.x;
+          const aimY = mouse.y - p.y;
+          const len = Math.hypot(aimX, aimY) || 1;
+          game.projectiles.push({ x: p.x, y: p.y, vx: (aimX / len) * 520, vy: (aimY / len) * 520, radius: 8, damage: 30, color: '#7fe7ff', life: 0.8, pierce: false });
+          addParticle(p.x, p.y, '#7fe7ff', 20);
+          addTextMessage('Void Blades', p.x, p.y - 24, '#7fe7ff');
+        }
+
+        if (key === 'e' && p.energy >= 30) {
+          p.energy -= 30;
+          for (const enemy of game.enemies) {
+            const dist = Math.hypot(enemy.x - p.x, enemy.y - p.y);
+            if (dist < 180) {
+              enemy.hp -= 24;
+              enemy.x += (enemy.x - p.x) * 0.07;
+              enemy.y += (enemy.y - p.y) * 0.07;
+              if (enemy.hp <= 0) {
+                enemy.alive = false;
+                game.score += 90;
+                addParticle(enemy.x, enemy.y, '#ff8bff', 20);
+              }
+            }
+          }
+          addParticle(p.x, p.y, '#ff8bff', 30);
+          addTextMessage('Gravity Pulse', p.x, p.y - 24, '#ff8bff');
+        }
+
+        if (key === 'r' && p.energy >= 25) {
+          p.energy -= 25;
+          let target = null;
+          let best = 999;
+          for (const enemy of game.enemies) {
+            const dist = Math.hypot(enemy.x - p.x, enemy.y - p.y);
+            if (dist < best) {
+              best = dist;
+              target = enemy;
+            }
+          }
+          if (target) {
+            target.x += (p.x - target.x) * 0.38;
+            target.y += (p.y - target.y) * 0.38;
+            target.hp -= 18;
+            target.phase = 1;
+            if (target.hp <= 0) {
+              target.alive = false;
+              game.score += 70;
+            }
+          }
+          addParticle(p.x, p.y, '#ffe7a3', 18);
+          addTextMessage('Spirit Chains', p.x, p.y - 24, '#ffe7a3');
+        }
+      }
+
+      function ultimate() {
+        if (!running) return;
+        const p = game.player;
+        if (p.energy < 100) return;
+        p.energy = 0;
+        p.ultimateActive = true;
+        p.ultimateTimer = 5;
+        game.ultimateActive = true;
+        shake = 0.2;
+        addParticle(p.x, p.y, '#ffd78d', 70);
+        addTextMessage('Celestial Burst', p.x, p.y - 30, '#ffd78d');
+        for (const enemy of game.enemies) {
+          const dist = Math.hypot(enemy.x - p.x, enemy.y - p.y);
+          if (dist < 220) {
+            enemy.hp -= 36;
+            if (enemy.hp <= 0) {
+              enemy.alive = false;
+              game.score += 120;
+            }
+          }
+        }
+        p.hp = Math.min(p.maxHp, p.hp + 20);
+      }
+
+      function toggleCurse() {
+        game.curseActive = !game.curseActive;
+        game.player.curseActive = game.curseActive;
+        addTextMessage(game.curseActive ? 'Curse unleashed' : 'Curse released', game.player.x, game.player.y - 32, '#ff8ec6');
+      }
+
+      function toggleSeal() {
+        game.sealActive = !game.sealActive;
+        game.player.sealActive = game.sealActive;
+        game.player.shield = game.sealActive ? 80 : 0;
+        addTextMessage(game.sealActive ? 'Heavenly Seal' : 'Seal lifted', game.player.x, game.player.y - 32, '#8ef0ff');
+      }
+
+      function update(dt) {
+        if (!running) return;
+        handleInput(dt);
+        if (mouse.down) attack();
+
+        game.timeSurvived += dt;
+
+        if (game.curseActive) {
+          game.player.hp -= 3.4 * dt;
+          game.player.energy = Math.min(game.player.maxEnergy, game.player.energy + 8 * dt);
+          if (game.player.hp <= 0) endGame();
+        }
+
+        if (game.player.shield > 0) {
+          game.player.shield = Math.max(0, game.player.shield - 10 * dt);
+        }
+
+        if (game.sealActive) {
+          game.player.energy = Math.min(game.player.maxEnergy, game.player.energy + 4 * dt);
+          game.player.shield = Math.min(80, game.player.shield + 12 * dt);
+        }
+
+        game.enemyTimer -= dt;
+        if (game.enemyTimer <= 0) {
+          const count = Math.min(3 + Math.floor(game.wave / 2), 7);
+          for (let i = 0; i < count; i++) spawnEnemy();
+          game.enemyTimer = Math.max(0.3, game.spawnRate - Math.min(0.2, (game.wave - 1) * 0.022));
+        }
+
+        if (game.wave > 1) {
+          game.bossTimer -= dt;
+          if (game.bossTimer <= 0) {
+            spawnBoss();
+            game.bossTimer = 9 + Math.random() * 4;
+          }
+        }
+
+        spawnPickup();
+
+        for (const enemy of game.enemies) {
+          if (!enemy.alive) continue;
+          const dx = game.player.x - enemy.x;
+          const dy = game.player.y - enemy.y;
+          const dist = Math.hypot(dx, dy) || 1;
+          const speed = enemy.speed * (game.player.ultimateActive ? 0.8 : 1);
+          enemy.x += (dx / dist) * speed * dt;
+          enemy.y += (dy / dist) * speed * dt;
+          enemy.drift += dt * 1.5;
+          if (enemy.boss) {
+            enemy.x += Math.sin(enemy.drift) * 0.7;
+            enemy.y += Math.cos(enemy.drift) * 0.7;
+          }
+          if (enemy.attackCooldown > 0) enemy.attackCooldown -= dt;
+          if (dist < enemy.radius + game.player.radius + 10 && enemy.attackCooldown <= 0) {
+            const dmg = enemy.boss ? 16 : 10;
+            if (game.player.shield > 0) {
+              game.player.shield = Math.max(0, game.player.shield - dmg);
+            } else {
+              game.player.hp -= dmg;
+            }
+            addParticle(game.player.x, game.player.y, enemy.color, 12);
+            enemy.attackCooldown = enemy.boss ? 1.2 : 0.9;
+            if (game.player.hp <= 0) endGame();
+          }
+        }
+
+        game.enemies = game.enemies.filter(e => e.alive || e.hp > 0);
+
+        for (const projectile of game.projectiles) {
+          projectile.x += projectile.vx * dt;
+          projectile.y += projectile.vy * dt;
+          projectile.life -= dt;
+          for (const enemy of game.enemies) {
+            if (!enemy.alive) continue;
+            const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
+            if (dist < projectile.radius + enemy.radius) {
+              enemy.hp -= projectile.damage + (game.player.ultimateActive ? 10 : 0);
+              projectile.life = 0;
+              addParticle(enemy.x, enemy.y, projectile.color, 10);
+              if (enemy.hp <= 0) {
+                enemy.alive = false;
+                game.score += enemy.boss ? 220 : 90;
+                game.player.energy = Math.min(game.player.maxEnergy, game.player.energy + 12);
+              }
+              break;
+            }
+          }
+        }
+        game.projectiles = game.projectiles.filter(p => p.life > 0);
+
+        for (const pickup of game.pickups) {
+          pickup.life -= dt;
+          const dist = Math.hypot(game.player.x - pickup.x, game.player.y - pickup.y);
+          if (dist < pickup.radius + game.player.radius + 8) {
+            if (pickup.type === 'heal') {
+              game.player.hp = Math.min(game.player.maxHp, game.player.hp + 24);
+              addTextMessage('+24 hp', game.player.x, game.player.y - 24, '#8fffd8');
+            } else {
+              game.player.energy = Math.min(game.player.maxEnergy, game.player.energy + 24);
+              addTextMessage('+24 energy', game.player.x, game.player.y - 24, '#8fe6ff');
+            }
+            addParticle(pickup.x, pickup.y, pickup.type === 'heal' ? '#8fffd8' : '#7fe7ff', 18);
+            pickup.life = -1;
+          }
+        }
+        game.pickups = game.pickups.filter(p => p.life > 0);
+
+        if (game.ally) {
+          const followSpeed = 140;
+          const dx = game.player.x - game.ally.x;
+          const dy = game.player.y - game.ally.y;
+          const dist = Math.hypot(dx, dy) || 1;
+          game.ally.x += (dx / dist) * Math.min(followSpeed * dt, dist);
+          game.ally.y += (dy / dist) * Math.min(followSpeed * dt, dist);
+          game.ally.cooldown -= dt;
+          if (game.ally.cooldown <= 0) {
+            for (const enemy of game.enemies) {
+              if (!enemy.alive) continue;
+              const d = Math.hypot(enemy.x - game.ally.x, enemy.y - game.ally.y);
+              if (d < 128) {
+                enemy.hp -= 10;
+                game.ally.cooldown = 0.7;
+                addParticle(enemy.x, enemy.y, '#8fffd8', 8);
+                if (enemy.hp <= 0) {
+                  enemy.alive = false;
+                  game.score += 45;
+                }
+                break;
+              }
+            }
+          }
+        }
+
+        for (const particle of game.particles) particle.life -= dt;
+        game.particles = game.particles.filter(p => p.life > 0);
+        for (const msg of game.messages) msg.life -= dt;
+        game.messages = game.messages.filter(m => m.life > 0);
+
+        if (game.score >= game.waveGoal) {
+          game.wave += 1;
+          game.spawnRate = Math.max(0.45, game.spawnRate - 0.05);
+          game.waveGoal = game.score + 420 + game.wave * 80;
+          addTextMessage(`Wave ${game.wave}`, canvas.width / 2 - 20, 80, '#ffd588');
+        }
+
+        if (shake > 0) shake -= dt;
+        cameraOffsetX = (Math.random() - 0.5) * shake * 24;
+        cameraOffsetY = (Math.random() - 0.5) * shake * 24;
+        updateHud();
+      }
+
+      function drawBackground() {
+        ctx.save();
+        ctx.translate(cameraOffsetX, cameraOffsetY);
+        const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        grad.addColorStop(0, '#111b39');
+        grad.addColorStop(1, '#06070e');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < 60; i++) {
+          const x = (i * 131 + performance.now() * 0.008) % (canvas.width + 40) - 20;
+          const y = (i * 73 + performance.now() * 0.005) % (canvas.height + 80) - 40;
+          ctx.fillStyle = i % 2 === 0 ? 'rgba(255,255,255,0.08)' : 'rgba(79,175,255,0.08)';
+          ctx.beginPath();
+          ctx.arc(x, y, 1.6 + (i % 3), 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.fillStyle = 'rgba(255,255,255,0.06)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < canvas.width; x += 80) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+        }
+        for (let y = 0; y < canvas.height; y += 80) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+
+      function drawPlayer() {
+        const p = game.player;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.shadowBlur = 24;
+        ctx.shadowColor = p.ultimateActive ? '#ffd588' : '#7fe3ff';
+        ctx.strokeStyle = p.invuln > 0 ? '#ffffff' : '#ffd0e4';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(0, 0, p.radius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.fillStyle = p.ultimateActive ? '#ffd588' : '#ff5c7f';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(0, 0, p.radius - 8, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.globalAlpha = 0.9;
+        ctx.fill();
+        ctx.restore();
+
+        if (p.attackAnim > 0) {
+          const aimX = mouse.x - p.x;
+          const aimY = mouse.y - p.y;
+          const len = Math.hypot(aimX, aimY) || 1;
+          const dx = aimX / len;
+          const dy = aimY / len;
+          ctx.save();
+          ctx.strokeStyle = '#fff';
+          ctx.lineWidth = 6;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p.x + dx * 95, p.y + dy * 95);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      function drawEnemies() {
+        for (const enemy of game.enemies) {
+          ctx.save();
+          ctx.translate(enemy.x, enemy.y);
+          ctx.fillStyle = enemy.color;
+          ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(0, 0, enemy.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = 'rgba(255,255,255,0.85)';
+          ctx.beginPath();
+          ctx.arc(0, 0, enemy.radius * 0.35, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      function drawAlly() {
+        const a = game.ally;
+        ctx.save();
+        ctx.translate(a.x, a.y);
+        ctx.strokeStyle = '#8fffd8';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, 10, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.fillStyle = '#8fffd8';
+        ctx.beginPath();
+        ctx.arc(0, 0, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawProjectiles() {
+        for (const p of game.projectiles) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.shadowBlur = 15;
+          ctx.shadowColor = p.color;
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      function drawPickups() {
+        for (const p of game.pickups) {
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.fillStyle = p.type === 'heal' ? '#8fffd8' : '#7fe7ff';
+          ctx.beginPath();
+          ctx.arc(0, 0, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      function drawParticles() {
+        for (const p of game.particles) {
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.life / 1.2);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, p.size, p.size);
+          ctx.restore();
+        }
+      }
+
+      function drawMessages() {
+        ctx.save();
+        ctx.font = 'bold 18px Segoe UI';
+        game.messages.forEach((m, i) => {
+          const alpha = Math.max(0, m.life / 1.2);
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = m.color;
+          ctx.fillText(m.text, m.x, m.y - i * 10);
+        });
+        ctx.restore();
+      }
+
+      function drawHUD() {
+        if (attackFlash > 0) {
+          ctx.save();
+          ctx.fillStyle = `rgba(255,255,255,${attackFlash * 0.25})`;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.restore();
+          attackFlash -= 0.016;
+        }
+
+        ctx.save();
+        ctx.fillStyle = 'rgba(255,255,255,0.84)';
+        ctx.font = 'bold 20px Segoe UI';
+        ctx.fillText(`Techniques: Q Void / E Gravity / R Chains`, 24, 34);
+        ctx.fillText(`State: ${game.curseActive ? 'Curse On' : 'Curse Off'} • ${game.sealActive ? 'Seal On' : 'Seal Off'}`, 24, 60);
+        ctx.restore();
+      }
+
+      function draw() {
+        drawBackground();
+        drawProjectiles();
+        drawPickups();
+        drawEnemies();
+        drawAlly();
+        drawParticles();
+        drawPlayer();
+        drawMessages();
+        drawHUD();
+      }
+
+      function loop(ts) {
+        const dt = Math.min((ts - lastTime) / 1000 || 0.016, 0.033);
+        lastTime = ts;
+        if (running) {
+          update(dt);
+          draw();
+        }
+        requestAnimationFrame(loop);
+      }
+
+      window.addEventListener('keydown', (e) => {
+        if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.w = true;
+        if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.s = true;
+        if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.a = true;
+        if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.d = true;
+        if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') keys.Shift = true;
+        if (e.code === 'KeyQ') castTechnique('q');
+        if (e.code === 'KeyE') castTechnique('e');
+        if (e.code === 'KeyR') castTechnique('r');
+        if (e.code === 'KeyF') ultimate();
+        if (e.code === 'KeyC') toggleCurse();
+        if (e.code === 'KeyV') toggleSeal();
+        if (e.code === 'Enter') {
+          if (!running && !gameOver) startGame();
+          else if (gameOver) startGame();
+        }
+      });
+
+      window.addEventListener('keyup', (e) => {
+        if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.w = false;
+        if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.s = false;
+        if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.a = false;
+        if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.d = false;
+        if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') keys.Shift = false;
+      });
+
+      canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = ((e.clientX - rect.left) / rect.width) * canvas.width;
+        mouse.y = ((e.clientY - rect.top) / rect.height) * canvas.height;
+      });
+
+      canvas.addEventListener('mousedown', (e) => {
+        if (e.button === 0) {
+          mouse.down = true;
+          attack();
+        }
+      });
+
+      canvas.addEventListener('mouseup', () => mouse.down = false);
+      canvas.addEventListener('mouseleave', () => mouse.down = false);
+
+      startBtn.addEventListener('click', () => startGame());
+      muteBtn.addEventListener('click', () => {
+        muted = !muted;
+        muteBtn.textContent = muted ? 'No Audio' : 'Audio On';
+      });
+
+      resetGame();
+      updateHud();
+      draw();
+      requestAnimationFrame(loop);
+    </script>
   </body>
 </html>
