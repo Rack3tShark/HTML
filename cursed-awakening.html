@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cursed Awakening</title>
+    <style>
+      :root {
+        --bg: #070b14;
+        --panel: #101727;
+        --panel-2: #18233a;
+        --text: #f4f7ff;
+        --muted: #9eb2d6;
+        --accent: #ff5d7a;
+        --accent-2: #6da8ff;
+        --accent-3: #2ee6c1;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, var(--bg), #111b2d 55%, #1c1630);
+        color: var(--text);
+        line-height: 1.6;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        inset: auto;
+        width: 24rem;
+        height: 24rem;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.22;
+        pointer-events: none;
+        z-index: -1;
+        animation: drift 16s ease-in-out infinite alternate;
+      }
+
+      body::before {
+        top: -6rem;
+        right: -4rem;
+        background: var(--accent);
+      }
+
+      body::after {
+        bottom: -8rem;
+        left: -6rem;
+        background: var(--accent-2);
+        animation-duration: 18s;
+      }
+
+      a {
+        color: var(--accent-2);
+      }
+
+      header {
+        padding: 4rem 1.5rem 3rem;
+        background: radial-gradient(circle at top, rgba(109, 168, 255, 0.25), transparent 55%);
+      }
+
+      .hero {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: grid;
+        gap: 2rem;
+        align-items: center;
+        grid-template-columns: 1.05fr 0.95fr;
+      }
+
+      .hero {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: grid;
+        gap: 1.5rem;
+        align-items: center;
+        grid-template-columns: 1.2fr 0.8fr;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.6rem, 5vw, 4.4rem);
+        margin: 0 0 1rem;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        background: linear-gradient(120deg, #ffffff, #ffd2df 35%, #7dbcff 70%, #2ee6c1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 24px rgba(255, 255, 255, 0.16);
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+        color: var(--muted);
+        max-width: 680px;
+      }
+
+      .hero .badge {
+        display: inline-block;
+        padding: 0.4rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(255, 93, 122, 0.16);
+        color: #ffd0db;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+      }
+
+      .hero-card {
+        background: linear-gradient(145deg, rgba(16, 23, 39, 0.95), rgba(24, 35, 58, 0.82));
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1.35rem;
+        padding: 1.4rem;
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.32);
+        transform: perspective(1000px) rotateY(-7deg) rotateX(6deg);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-card:hover {
+        transform: perspective(1000px) rotateY(-3deg) rotateX(2deg) translateY(-4px);
+        box-shadow: 0 32px 90px rgba(0, 0, 0, 0.38);
+      }
+
+      .hero-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.12) 50%, transparent 80%);
+        transform: translateX(-120%);
+        animation: shimmer 5s linear infinite;
+      }
+
+      .hero-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+        margin-bottom: 0.9rem;
+      }
+
+      .chip {
+        display: inline-block;
+        padding: 0.42rem 0.7rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #e7f2ff;
+        font-size: 0.8rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .hero-preview {
+        display: grid;
+        gap: 0.7rem;
+        margin-top: 1rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .mini-panel {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 0.9rem;
+        padding: 0.8rem;
+        min-height: 84px;
+        backdrop-filter: blur(8px);
+      }
+
+      .mini-panel strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: #fff2f6;
+      }
+
+      .mini-panel span {
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      nav {
+        max-width: 1100px;
+        margin: 0 auto 2rem;
+        padding: 0 1.5rem;
+      }
+
+      nav ul {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        padding: 0;
+        margin: 0;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: var(--text);
+        padding: 0.6rem 0.95rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 1.5rem 4rem;
+      }
+
+      section {
+        margin-bottom: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+        margin-bottom: 0.8rem;
+        color: #f9f0f4;
+        text-shadow: 0 0 20px rgba(255, 93, 122, 0.18);
+      }
+
+      .grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .card {
+        background: linear-gradient(145deg, rgba(16, 23, 39, 0.96), rgba(24, 35, 58, 0.85));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 1rem;
+        padding: 1.2rem 1.3rem;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-6px) scale(1.01);
+        box-shadow: 0 16px 44px rgba(0, 0, 0, 0.24);
+        border-color: rgba(109, 168, 255, 0.35);
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.04) 50%, transparent 100%);
+        pointer-events: none;
+      }
+
+      .card h3 {
+        margin-top: 0;
+        margin-bottom: 0.6rem;
+      }
+
+      .card ul {
+        padding-left: 1.1rem;
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .highlight {
+        color: #ffd8e1;
+      }
+
+      footer {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 1.5rem 2rem;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      @keyframes drift {
+        from {
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+        to {
+          transform: translate3d(30px, -20px, 0) scale(1.08);
+        }
+      }
+
+      @keyframes shimmer {
+        from {
+          transform: translateX(-120%);
+        }
+        to {
+          transform: translateX(120%);
+        }
+      }
+
+      @keyframes floaty {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(1px);
+        animation: floaty 6s ease-in-out infinite;
+      }
+
+      .orb.one {
+        width: 4rem;
+        height: 4rem;
+        background: rgba(255, 93, 122, 0.45);
+        top: 1rem;
+        right: 1.2rem;
+      }
+
+      .orb.two {
+        width: 2.4rem;
+        height: 2.4rem;
+        background: rgba(46, 230, 193, 0.4);
+        bottom: 1rem;
+        left: 1rem;
+        animation-delay: -2s;
+      }
+
+      @media (max-width: 800px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-preview {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="hero">
+        <div>
+          <span class="badge">Original Action RPG Concept</span>
+          <h1>Cursed Awakening</h1>
+          <p>
+            A browser-based action RPG where fast combat, supernatural energy, and cinematic boss battles collide in a city torn between ancient powers and modern ruin.
+          </p>
+        </div>
+        <div class="hero-card">
+          <div class="orb one"></div>
+          <div class="orb two"></div>
+          <div class="hero-badges">
+            <span class="chip">Anime Action</span>
+            <span class="chip">3D Stylized</span>
+            <span class="chip">Branching Fate</span>
+          </div>
+          <h2>Core Pitch</h2>
+          <p>
+            The game blends anime-style presentation with a fresh supernatural energy system, letting players unleash devastating techniques, command AI teammates, survive brutal boss phases, and shape the fate of a fractured world as a cursed, heavenly-bound, or entirely self-made warrior.
+          </p>
+          <div class="hero-preview">
+            <div class="mini-panel">
+              <strong>Ultimate Field</strong>
+              <span>Sky-shattering arenas with new rules and finishers.</span>
+            </div>
+            <div class="mini-panel">
+              <strong>Adaptive Combat</strong>
+              <span>Enemies learn and bosses evolve through each clash.</span>
+            </div>
+            <div class="mini-panel">
+              <strong>Custom Curses</strong>
+              <span>Turn divine restrictions into a signature build.</span>
+            </div>
+            <div class="mini-panel">
+              <strong>Anime Flair</strong>
+              <span>Stylized visuals, dramatic effects, and cinematic pacing.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#combat">Combat</a></li>
+        <li><a href="#world">World</a></li>
+        <li><a href="#progression">Progression</a></li>
+        <li><a href="#story">Story</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <section id="overview">
+        <h2 class="section-title">Overview</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Genre & Platform</h3>
+            <ul>
+              <li>Open-world action RPG</li>
+              <li>Desktop-first browser experience</li>
+              <li>Mobile support planned for later</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Visual Style</h3>
+            <ul>
+              <li>Anime-inspired cel shading</li>
+              <li>Dynamic lighting and weather</li>
+              <li>Day/night cycle with destructible environments</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="combat">
+        <h2 class="section-title">Combat</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Fluid Action</h3>
+            <ul>
+              <li>Light combo chains and heavy attacks</li>
+              <li>Launches, air combos, ground slams, and wall bounces</li>
+              <li>Parries, counters, grabs, and perfect dodges</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Energy System</h3>
+            <ul>
+              <li>Build energy through landed hits and perfect defense</li>
+              <li>Spend it on special techniques and ultimates</li>
+              <li>Create defensive barriers and movement-enhancing skills</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>AI Enemies & Teammates</h3>
+            <ul>
+              <li>Enemies study your habits and adapt their aggression</li>
+              <li>AI teammates support with buffs, assists, and tactical combos</li>
+              <li>Companions can be customized to fit your preferred combat style</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Techniques, Restrictions & Curses</h3>
+            <ul>
+              <li>Void Blades, Gravity Pulse, Spirit Chains, Flame Rift, Thunder Crash, Ice Lotus</li>
+              <li>Starfall Lattice, Cursed Echo, Aegis Thread, and Rift Cannon</li>
+              <li>Heavenly restrictions can limit certain powers, while curses reshape your abilities and identity</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Ultimate Fields</h3>
+            <ul>
+              <li>Temporary arenas with altered rules</li>
+              <li>Trapped enemies and transformed environments</li>
+              <li>Exclusive finishers and dramatic visual effects</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Playstyle Freedom</h3>
+            <ul>
+              <li>Become a melee duelist, ranged technique user, or curse-bound hybrid</li>
+              <li>Mix divine power, forbidden magic, and AI-assisted tactics</li>
+              <li>Shape your hero into whatever you want to be</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="world">
+        <h2 class="section-title">World & Exploration</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Regions</h3>
+            <ul>
+              <li>Modern city</li>
+              <li>Forest and mountains</li>
+              <li>Abandoned subway, labs, temples, and hidden dimensions</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Exploration Features</h3>
+            <ul>
+              <li>Parkour routes, wall runs, air dashes, and grapples</li>
+              <li>Hidden collectibles and secret bosses</li>
+              <li>Fast travel to revisit earlier regions with new abilities</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="progression">
+        <h2 class="section-title">Progression & Replayability</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Player Growth</h3>
+            <ul>
+              <li>Experience, levels, skill trees, and upgrades</li>
+              <li>Technique and equipment advancement</li>
+              <li>Cosmetics, titles, and achievements</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Endgame</h3>
+            <ul>
+              <li>Survival mode and time trials</li>
+              <li>Boss rush, randomized dungeons, and daily challenges</li>
+              <li>New techniques, hidden superbosses, and New Game+</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="systems">
+        <h2 class="section-title">What Makes It Feel Bigger</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Faction Conflict</h3>
+            <ul>
+              <li>Heavenly agents, cursed cults, and rogue hunters all compete for control</li>
+              <li>Ally with factions, betray them, or walk your own path</li>
+              <li>Choices affect story outcomes, rewards, and available powers</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Adaptive Bosses</h3>
+            <ul>
+              <li>Bosses learn from your attacks and change their tactics mid-fight</li>
+              <li>Environmental hazards intensify as the battle evolves</li>
+              <li>Each encounter can become a different kind of test depending on your build</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Meaningful Customization</h3>
+            <ul>
+              <li>Equip cursed relics, divine sigils, and combat stances</li>
+              <li>Unlock alternate fighting styles and signature finishing moves</li>
+              <li>Build a hero that feels uniquely yours rather than just stronger</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Memorable Moments</h3>
+            <ul>
+              <li>Sky-shattering ultimate fields and citywide transformations</li>
+              <li>Emotional story scenes, betrayals, and dramatic revelations</li>
+              <li>Replayable routes that reward experimentation and curiosity</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="story">
+        <h2 class="section-title">Story & Polish</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Story Hook</h3>
+            <p>
+              A young protagonist uncovers an ancient source of supernatural power after citywide disasters begin to erupt. Rival factions, hidden truths, and morally complex alliances shape a branching finale.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Polish Layer</h3>
+            <p>
+              The experience is elevated with an anime-inspired soundtrack, voice effects, screen shake, particle-heavy attacks, damage numbers, a combo counter, motion blur options, and a photo mode.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built as a semantic HTML showcase for the <span class="highlight">Cursed Awakening</span> concept.</p>
+    </footer>
+  </body>
+</html>
